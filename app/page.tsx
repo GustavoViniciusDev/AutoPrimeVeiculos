@@ -1,103 +1,364 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState, useMemo } from "react"
+import { Search, Phone, MessageCircle, Sun, Moon, Car, Fuel, Calendar } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent } from "@/components/ui/card"
+import { Slider } from "@/components/ui/slider"
+import Link from "next/link"
+
+import { carsData as mockCars } from "@/lib/cars-data"
+
+const brands = [
+  "Toyota",
+  "Honda",
+  "Ford",
+  "BMW",
+  "Mercedes",
+  "Tesla",
+  "Audi",
+  "Volkswagen",
+  "Hyundai",
+  "Nissan",
+  "Chevrolet",
+  "Jeep",
+]
+const fuelTypes = ["Gasolina", "Diesel", "Elétrico", "Híbrido"]
+
+export default function AutoPrimeLanding() {
+  const [darkMode, setDarkMode] = useState(false)
+  const [filters, setFilters] = useState({
+    brand: "all",
+    model: "",
+    yearFrom: 2010,
+    yearTo: 2024,
+    priceRange: [0, 1000000],
+    fuel: "all",
+  })
+
+  const filteredCars = useMemo(() => {
+    return mockCars.filter((car) => {
+      return (
+        (filters.brand === "all" || car.brand === filters.brand) &&
+        (!filters.model || car.model.toLowerCase().includes(filters.model.toLowerCase())) &&
+        car.year >= filters.yearFrom &&
+        car.year <= filters.yearTo &&
+        car.price >= filters.priceRange[0] &&
+        car.price <= filters.priceRange[1] &&
+        (filters.fuel === "all" || car.fuel === filters.fuel)
+      )
+    })
+  }, [filters])
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 0,
+    }).format(price)
+  }
+
+  const formatMileage = (mileage: number) => {
+    return new Intl.NumberFormat("pt-BR").format(mileage) + " km"
+  }
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}>
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <Car className="h-8 w-8 text-blue-600" />
+            <span className="text-2xl font-bold text-gray-900 dark:text-white">AutoPrime Veículos</span>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <nav className="hidden md:flex items-center space-x-8">
+            <a
+              href="#"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Home
+            </a>
+            <a
+              href="#"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Estoque
+            </a>
+            <a
+              href="#"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+            >
+              Contato
+            </a>
+          </nav>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setDarkMode(!darkMode)}
+            className="text-gray-700 dark:text-gray-300"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="pt-24 pb-16 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">Encontre o carro dos seus sonhos</h1>
+          <p className="text-xl md:text-2xl mb-8 text-blue-100">Estoque atualizado, condições imperdíveis!</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100">
+              Ver Estoque
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600 bg-transparent"
+            >
+              Falar com Vendedor
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Filters Section */}
+      <section className="py-8 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Filtrar Veículos</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Marca</label>
+              <Select value={filters.brand} onValueChange={(value) => setFilters({ ...filters, brand: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todas as marcas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todas as marcas</SelectItem>
+                  {brands.map((brand) => (
+                    <SelectItem key={brand} value={brand}>
+                      {brand}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Modelo</label>
+              <Input
+                placeholder="Digite o modelo"
+                value={filters.model}
+                onChange={(e) => setFilters({ ...filters, model: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Ano (De)</label>
+              <Select
+                value={filters.yearFrom.toString()}
+                onValueChange={(value) => setFilters({ ...filters, yearFrom: Number.parseInt(value) })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 15 }, (_, i) => 2010 + i).map((year) => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Ano (Até)</label>
+              <Select
+                value={filters.yearTo.toString()}
+                onValueChange={(value) => setFilters({ ...filters, yearTo: Number.parseInt(value) })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 15 }, (_, i) => 2010 + i).map((year) => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Combustível</label>
+              <Select value={filters.fuel} onValueChange={(value) => setFilters({ ...filters, fuel: value })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Todos os tipos" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos os tipos</SelectItem>
+                  {fuelTypes.map((fuel) => (
+                    <SelectItem key={fuel} value={fuel}>
+                      {fuel}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex items-end">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Search className="h-4 w-4 mr-2" />
+                Aplicar Filtros
+              </Button>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+              Faixa de Preço: {formatPrice(filters.priceRange[0])} - {formatPrice(filters.priceRange[1])}
+            </label>
+            <Slider
+              value={filters.priceRange}
+              onValueChange={(value) => setFilters({ ...filters, priceRange: value })}
+              max={1000000}
+              min={0}
+              step={10000}
+              className="w-full"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Cars Grid */}
+      <section className="py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Nosso Estoque ({filteredCars.length} veículos)
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredCars.map((car) => (
+              <Card
+                key={car.id}
+                className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+              >
+                <CardContent className="p-0">
+                  <div className="relative overflow-hidden rounded-t-lg">
+                    <img
+                      src={car.image || "/placeholder.svg"}
+                      alt={`${car.brand} ${car.model}`}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-4 right-4 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      {car.year}
+                    </div>
+                  </div>
+
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">
+                      {car.brand} {car.model}
+                    </h3>
+
+                    <div className="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        {car.year}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Car className="h-4 w-4" />
+                        {formatMileage(car.mileage)}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Fuel className="h-4 w-4" />
+                        {car.fuel}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="text-2xl font-bold text-blue-600">{formatPrice(car.price)}</div>
+                    </div>
+
+                    <Link href={`/carros/${car.slug}`}>
+                      <Button className="w-full mt-4 bg-blue-600 hover:bg-blue-700">Ver Detalhes</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {filteredCars.length === 0 && (
+            <div className="text-center py-12">
+              <Car className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Nenhum veículo encontrado</h3>
+              <p className="text-gray-600 dark:text-gray-400">Tente ajustar os filtros para encontrar o carro ideal.</p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Car className="h-8 w-8 text-blue-400" />
+                <span className="text-2xl font-bold">AutoPrime Veículos</span>
+              </div>
+              <p className="text-gray-400">
+                Sua concessionária de confiança com os melhores carros e condições do mercado.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Contato</h3>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-blue-400" />
+                  <span>(11) 9999-9999</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4 text-green-400" />
+                  <span>WhatsApp: (11) 9999-9999</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Redes Sociais</h3>
+              <div className="flex gap-4">
+                <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                  <MessageCircle className="h-4 w-4 mr-2" />
+                  WhatsApp
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-800 bg-transparent"
+                >
+                  <Phone className="h-4 w-4 mr-2" />
+                  Ligar
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
+            <p>&copy; 2025 AutoPrime Veículos. Todos os direitos reservados.</p>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
