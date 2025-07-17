@@ -26,6 +26,13 @@ Uma landing page moderna e responsiva para uma concessionária de veículos, des
 - **Carros relacionados** da mesma marca
 - **Breadcrumb** para navegação
 
+### 📞 **Página de Contatos**
+- **Formulario de contato**
+- **Informações de contato**
+- **Horário de Funcionamento**
+- **Ações Rapidas**
+- **Localização no Google maps** 
+
 ### 🎨 **Design e UX**
 - **Tema dark/light** com transições suaves
 - **Totalmente responsivo** (desktop, tablet, mobile)
@@ -84,8 +91,10 @@ autoprime-veiculos/
 ├── app/
 │   ├── carros/
 │   │   └── [slug]/
-│   │       └── page.tsx          # Página de detalhes do carro
-│   ├── globals.css               # Estilos globais
+│   │       └── page.tsx         # Página de detalhes do carro
+│   ├── contato/
+│   │   └── page.tsx             # Página para entrar em contato com a loja
+│   ├── globals.css              # Estilos globais
 │   ├── layout.tsx               # Layout raiz
 │   └── page.tsx                 # Página principal
 ├── components/

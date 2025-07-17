@@ -33,7 +33,7 @@ export default function AutoPrimeLanding() {
     brand: "all",
     model: "",
     yearFrom: 2010,
-    yearTo: 2024,
+    yearTo: 2025,
     priceRange: [0, 1000000],
     fuel: "all",
   })
@@ -88,7 +88,7 @@ export default function AutoPrimeLanding() {
               Estoque
             </a>
             <a
-              href="#"
+              href="/contato"
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Contato
