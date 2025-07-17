@@ -312,7 +312,7 @@ export const carsData: Car[] = [
     id: 10,
     brand: "Nissan",
     model: "Sentra",
-    year: 2025,
+    year: 2024,
     mileage: 0,
     price: 176990,
     fuel: "Gasolina",

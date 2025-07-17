@@ -23,9 +23,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTheme } from "@/contexts/theme-context"
 
 export default function ContatoPage() {
-  const [darkMode, setDarkMode] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -109,7 +110,7 @@ export default function ContatoPage() {
   ]
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? "dark bg-gray-900" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -144,10 +145,11 @@ export default function ContatoPage() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={toggleTheme}
             className="text-gray-700 dark:text-gray-300"
+            aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
           >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
         </div>
       </header>

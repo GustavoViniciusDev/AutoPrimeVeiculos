@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { getCarBySlug, getRelatedCars } from "@/lib/cars-data"
+import { useTheme } from "@/contexts/theme-context"
 
 interface CarDetailPageProps {
   params: Promise<{
@@ -33,7 +34,7 @@ interface CarDetailPageProps {
 
 export default function CarDetailPage({ params }: CarDetailPageProps) {
   const resolvedParams = use(params)
-  const [darkMode, setDarkMode] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [financingData, setFinancingData] = useState({
     downPayment: 20000,
@@ -84,7 +85,7 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? "dark bg-gray-900" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -103,10 +104,11 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={toggleTheme}
             className="text-gray-700 dark:text-gray-300"
+            aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
           >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
         </div>
       </header>

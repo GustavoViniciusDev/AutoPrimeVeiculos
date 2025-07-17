@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card"
 import { Slider } from "@/components/ui/slider"
 import Link from "next/link"
+import { useTheme } from "@/contexts/theme-context"
 
 import { carsData as mockCars } from "@/lib/cars-data"
 
@@ -28,7 +29,7 @@ const brands = [
 const fuelTypes = ["Gasolina", "Diesel", "Elétrico", "Híbrido"]
 
 export default function AutoPrimeLanding() {
-  const [darkMode, setDarkMode] = useState(false)
+  const { isDark, toggleTheme } = useTheme()
   const [filters, setFilters] = useState({
     brand: "all",
     model: "",
@@ -65,7 +66,7 @@ export default function AutoPrimeLanding() {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${darkMode ? "dark bg-gray-900" : "bg-gray-50"}`}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? "dark bg-gray-900" : "bg-gray-50"}`}>
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -87,21 +88,22 @@ export default function AutoPrimeLanding() {
             >
               Estoque
             </a>
-            <a
+            <Link
               href="/contato"
               className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Contato
-            </a>
+            </Link>
           </nav>
 
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={toggleTheme}
             className="text-gray-700 dark:text-gray-300"
+            aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
           >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
         </div>
       </header>
@@ -228,7 +230,7 @@ export default function AutoPrimeLanding() {
             <Slider
               value={filters.priceRange}
               onValueChange={(value) => setFilters({ ...filters, priceRange: value })}
-              max={1000000}
+              max={500000}
               min={0}
               step={10000}
               className="w-full"
