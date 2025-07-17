@@ -202,13 +202,13 @@ export default function CarDetailPage({ params }: CarDetailPageProps) {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
-                className="bg-green-600 hover:bg-green-700 flex-1"
+                className="bg-green-600 hover:bg-green-700 sm:flex-1 min-h-[48px] py-3 px-6"
                 onClick={() => window.open(generateWhatsAppMessage(), "_blank")}
               >
                 <MessageCircle className="h-5 w-5 mr-2" />
                 WhatsApp
               </Button>
-              <Button size="lg" variant="outline" className="flex-1 bg-transparent">
+              <Button size="lg" variant="outline" className="sm:flex-1 bg-transparent min-h-[48px] py-3 px-6">
                 <Phone className="h-5 w-5 mr-2" />
                 (11) 9999-9999
               </Button>

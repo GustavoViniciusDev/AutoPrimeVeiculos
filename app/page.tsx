@@ -355,7 +355,22 @@ export default function AutoPrimeLanding() {
           </div>
 
           <div className="border-t border-gray-800 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 AutoPrime Veículos. Todos os direitos reservados.</p>
+            <p
+                id="disclaimer"
+                className="text-slate-400 text-xs md:text-sm mb-4 max-w-3xl mx-auto leading-relaxed"
+              >
+                Este site foi desenvolvido apenas para fins de portfólio.
+              </p>
+            <p>&copy; 2025 | Criado e codificado por{" "}
+              <a
+                  href="https://gustavoviniciusdev.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-400 hover:text-green-500 underline underline-offset-2"
+              >
+                  Gustavo Vinicius
+              </a>
+              .</p>
           </div>
         </div>
       </footer>
